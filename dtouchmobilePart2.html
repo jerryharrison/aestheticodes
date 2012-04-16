@@ -98,7 +98,8 @@ This class is used to define the default preferences which are used by the Dtouc
 HISurfaceViewBase and HIMarkerSurfaceView</h4>
 <div style="text-align: left;">
 SurfaceView class in the Android framework provides a drawing surface inside a view hierarchy. It is very useful to preview camera output. HISurfaceViewBase extends from the SurfaceView class and implements the SurfaceHolder.Callback interface. This interface is useful to receive the notifications about changes in the camera surface. The most important functions are surfaceCreated, surfaceChanged and surfaceDestroyed. We start marker detection processing when surfaceCreated is called and stop marker detection processing when surface is destroyed. HIMarkerSurfaceView implements marker specific processing. Copy HISurfaceViewBase and HIMarkerSurfaceView files from DtouchSample1 project and copy it into your project. There are two functions in HIMarkerSurfaceView where we call DtouchMobile library. First is initData function where we initialise MarkerDetector object.</div>
-<pre class="brush:java" name="code">    @Override
+<pre>
+@Override
     protected void initData(){
      releaseData();
         
@@ -117,7 +118,7 @@ SurfaceView class in the Android framework provides a drawing surface inside a v
 </pre>
 This function creates the MarkerDetector object and initialises it with the activity context and PreferenceSample1 class. The second point where we call the markerDetector object is when a region is detected and we want to test if the detected region is a d-touch marker. It is called from the findMarkers function.
 <br />
-<pre class="brush:java" name="code">   private boolean findMarkers(Mat imgMat, DtouchMarker marker){
+<pre>   private boolean findMarkers(Mat imgMat, DtouchMarker marker){
      boolean markerFound = false;
      Mat contourImg = imgMat.clone();
      //Find blobs using connect component.
@@ -151,7 +152,7 @@ This function calls the OpenCV findContours function to detect regions. These re
 HICameraActivity &amp; markerCamera.xml </h4>
 We have included surfaceView in our project by copying HISurfaceViewBase and HISurfaceView. Now we will need to setup an activity which uses this surface. HICameraActivity is a simple activity class which creates surface view by using markerCamera.xml as its layout. Copy HICameraActivity.java from the sample project into the default package of our current project. Also copy markerCamera.xml from the res/layout folder from the sample project into current projects res/layout folder. Please make sure that there is a correct path for surfaceView control in the markerCamera.xml file. The path is referenced in the class property of html tag view. For example our markerCamera.xml file looks like as follows:<br />
 <div style="text-align: left;">
-<pre class="brush:cpp" name="code">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<pre>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;LinearLayout android:id="@+id/MarkerLayout"
  android:layout_width="fill_parent" android:layout_height="fill_parent"
  xmlns:android="http://schemas.android.com/apk/res/android"&gt;
@@ -178,7 +179,7 @@ In this case the class property in the view tag has value uk.test.dtouchSample1.
 AndroidManifest.xml</h4>
 <div style="text-align: left;">
 Open AndroidManifest.xml file and update activity to HICameraActivity and also add camera permission into your file. Here is how your manifest file might looks like:</div>
-<pre class="brush:cpp" name="code">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<pre>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="uk.test.dtouchSample1"
       android:versionCode="1"

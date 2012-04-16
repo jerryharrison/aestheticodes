@@ -152,11 +152,11 @@ This function receives following parameters:</div>
 <li>codes: This is an empty list and if a marker is valid then the verifyRoot function fills the code of that marker in this list.</li>
 </ul>
 One question which might come into mind would be how to get the parameter values which are required as an input to the verifyRoot function? As we have mentioned in our previous post that we use OpenCV to process images. In order to get the values for above parameters we use OpenCV function called findContours. This function is called as follows:<br />
-<pre class="brush:java" name="code">Imgproc.findContours(contourImg, mComponents, mHierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+<pre>Imgproc.findContours(contourImg, mComponents, mHierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
 </pre>
 findCountours function finds contours or regions in the image and returns the list of regions in the components parameter and the whole hierarchy in the hierarchy parameter. For more information please refer to the OpenCV documentation.<br />
 After getting the list of components we iterate through this list and test each component for a valid d-touch marker root node. The implementation is as follows:<br />
-<pre class="brush:java" name="code">    for (int i = 0; i &lt; mComponents.size(); i++){
+<pre>    for (int i = 0; i &lt; mComponents.size(); i++){
       //clean this list.
       code.clear();
       if (markerDetector.verifyRoot(i, mComponents.get(i), mHierarchy,code)){
@@ -171,7 +171,7 @@ After getting the list of components we iterate through this list and test each 
 </pre>
 In this code we iterate through the list of components which is determined through findContours function. We check if a particular component is a valid d-touch marker through verifyRoot function. Now lets see the logic behind verifyRoot function. 
 <br />
-<pre class="brush:java" name="code"> 
+<pre> 
 public Boolean verifyRoot(int rootIndex, Mat rootNode, Mat hierarchy, List&lt;integer&gt; codes){
   Boolean valid = false;
   int branchCount = 0;
@@ -237,7 +237,7 @@ This function first gets the immediate hierarchy of the root node. From this imm
 verifyBranch</h3>
 <div style="text-align: left;">
 verifyBranch function is called from verifyRoot function to check if a particular node is a valid branch. A node is a valid branch if it has zero or more valid leaves. A valid branch should also fulfills the constrainsts defined in the preference class. In order to validate a node as a valid branch it checks if its child nodes are valid leaves. It then verifies the branch against constraints defined in the preferences class. In case of valid branch the total number of leaves in this valid branch are added in the code list as part of the code. </div>
-<pre class="brush:java" name="code">private BranchStatus verifyBranch(int branchIndex, Mat hierarchy, List&lt;integer&gt; codes){
+<pre>private BranchStatus verifyBranch(int branchIndex, Mat hierarchy, List&lt;integer&gt; codes){
   int leafCount = 0;
   int currentLeafIndex = -1;
   BranchStatus status = BranchStatus.INVALID;
@@ -286,7 +286,7 @@ verifyLeaf</h3>
 This function is called from the verifyBranch function to check if a particular node is a valid leaf. A node is a valid leaf if it does not have any child nodes. The implementation of this function is very simple:</div>
 <div style="text-align: left;">
 &nbsp; </div>
-<pre class="brush:java" name="code"> private Boolean verifyLeaf(int leafIndex, Mat hierarchy){
+<pre> private Boolean verifyLeaf(int leafIndex, Mat hierarchy){
   Boolean valid = true;
   //Get nodes of branch index.
   double[] nodes = hierarchy.get(0, leafIndex);
@@ -324,7 +324,7 @@ verifyMarkerCode</h3>
 <div style="text-align: left;">
 This function first checks the validation branches and then calculates the checksum as shown below:
 <br />
-<pre class="brush:java" name="code"> public Boolean verifyMarkerCode(){
+<pre> public Boolean verifyMarkerCode(){
   Boolean valid = false;
   if (verifyValidationBranches())
    valid = verifyChecksum();
@@ -345,7 +345,7 @@ verifyValidationBranches</h3>
 </div>
 <div style="text-align: left;">
 This function simply checks if the d-touch marker code has number of validation branches as mentioned in the preferences class. The code is shown below:<br />
-<pre class="brush:java" name="code"> private boolean verifyValidationBranches(){
+<pre> private boolean verifyValidationBranches(){
   boolean valid = false;
   int numberOfValidationBranches = 0;
   for (int code : markerCodes){
@@ -368,7 +368,7 @@ verifyChecksum</h3>
 <div style="text-align: left;">
 This function first calculates the total number of leaves in a d-touch code by simply adding all the numbers in a code. For example if a code is 1:1:1:1:2:4:4:6 then the total number of leaves in the marker are 1+1+1+1+2+4+4+6 = 20.&nbsp; It divides the total sum by the checksum modulo. If the mod is zero then it means the checksum of the code is valid. The function is implemented as follows:
 <br />
-<pre class="brush:java" name="code"> private boolean verifyChecksum(){
+<pre> private boolean verifyChecksum(){
   boolean valid = false;
   int numberOfLeaves = 0;
   for (int code: markerCodes){
