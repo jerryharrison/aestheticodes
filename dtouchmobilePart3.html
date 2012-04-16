@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Tableware : d-touch Mobile - Part 1" />
+    <meta name="description" content="Tableware : d-touch Mobile - Part 3" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -32,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-In our last two posts we discussed about <a href="http://horizoncloud.blogspot.co.uk/2012/04/d-touch-mobile-d-touch-markers-are.html">d-touch markers</a> and how<a href="http://horizoncloud.blogspot.co.uk/2012/04/d-touch-mobile-part-2.html"> d-touch mobile library</a> can be configured and used in an Android application. In this post we are going to discuss the architecture of the d-touch mobile library.<br />
+In this post we will discuss the architecture of the d-touch mobile library.<br />
 <br />
 There are three main entities or classes of the d-touch mobile library.<br />
 <ol style="text-align: left;">
@@ -43,7 +43,7 @@ There are three main entities or classes of the d-touch mobile library.<br />
 The sequence diagram of these entities is shown in figure 1:<br />
 <br />
 <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
-<tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-s0I5oDNMbgI/T4WcA-uaSZI/AAAAAAAAAns/_OGUorCsTLg/s1600/DtouchMobileSequenceDiagram.jpg" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-s0I5oDNMbgI/T4WcA-uaSZI/AAAAAAAAAns/_OGUorCsTLg/s1600/DtouchMobileSequenceDiagram.jpg" /></a></td></tr>
+<tr><td style="text-align: center;"><a href="./images/DtouchMobileSequenceDiagram.jpg" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="./images/DtouchMobileSequenceDiagram.jpg" /></a></td></tr>
 <tr><td class="tr-caption" style="text-align: center;">Figure 1: Sequence diagram of d-touch mobile library</td></tr>
 </tbody></table>
 <br />
@@ -98,7 +98,7 @@ In order to calculate the checksum of a d-touch marker code the program first ve
 </ul>
 and for example our maker looks like as shown in figure 2:<br />
 <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
-<tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-Rw_JaZl7O18/T4WmLf1KU8I/AAAAAAAAAn0/UvL84igkFxQ/s1600/dotuchMarkerExample.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="163" src="http://4.bp.blogspot.com/-Rw_JaZl7O18/T4WmLf1KU8I/AAAAAAAAAn0/UvL84igkFxQ/s320/dotuchMarkerExample.png" width="320" /></a></td></tr>
+<tr><td style="text-align: center;"><a href="./images/dotuchMarkerExample.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="163" src="./images/dotuchMarkerExample.png" width="320" /></a></td></tr>
 <tr><td class="tr-caption" style="text-align: center;">Figure 2: Dtouch marker with validation branches.</td></tr>
 </tbody></table>
 As you can see from figure 2 that the marker has total eight branches among which four branches have exactly one leaf. So there are four validation branches in this marker. Now if we count the total number of leaves in this marker we get the result as 20. If we divide the total number of leaves i.e. 20 by the checksum modulo which is 10 then we get the result as 2.&nbsp; This means that the marker shown in figure 2 is a valid marker.<br />
@@ -122,7 +122,7 @@ As you can see from figure 2 that the marker has total eight branches among whic
 
 DetectMarker</h2>
 <div style="text-align: left;">
-This class is used to check if the given nodes represent a valid d-touch marker. A valid d-touch marker has one dark region and is called root. The root region has one or more light region and these light regions are referred as branches. Each branch node can have zero or more dark regions. The dark regions inside branches are called leaves. Marker in figure 2 is a valid d-touch marker. For more information about the d-touch marker please refer to <a href="http://horizoncloud.blogspot.co.uk/2012/04/d-touch-mobile-d-touch-markers-are.html">d-touch Mobile Part 1</a> blog. <br />
+This class is used to check if the given nodes represent a valid d-touch marker. A valid d-touch marker has one dark region and is called root. The root region has one or more light region and these light regions are referred as branches. Each branch node can have zero or more dark regions. The dark regions inside branches are called leaves. Marker in figure 2 is a valid d-touch marker. For more information about the d-touch marker please refer to the <a href="http://horizon-institute.github.com/tableware/">documentation </a> blog. <br />
 <br />
 <h3 style="text-align: left;">
 
@@ -388,7 +388,7 @@ This function first calculates the total number of leaves in a d-touch code by s
 &nbsp; I hope this documentation is helpful to understand the d-touch mobile library. If you would like to see the d-touch mobile library in action then please check the code deployed on the <a href="https://github.com/horizon-institute/tableware">github</a> website. </div>
 </div>
 </div>
-
+<br/>
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">

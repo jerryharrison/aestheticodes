@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Tableware : d-touch Mobile - Part 1" />
+    <meta name="description" content="Tableware : d-touch Mobile - Part 2" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -32,9 +32,9 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
 		<div dir="ltr" style="text-align: left;" trbidi="on">
-In our last post we discussed a brief introduction of&nbsp; <a href="http://horizoncloud.blogspot.co.uk/2012/04/d-touch-mobile-d-touch-markers-are.html">d-touch markers</a>.In this post we will see how to use d-touch mobile library in an Android project. The output of our sample project would look like as shown in picture 1. You can find the library in DtouchMobile folder and the sample code in DtouchSample1 folder on the <a href="https://github.com/horizon-institute/tableware">github</a>. <br />
+In this post we will see how to use d-touch mobile library in an Android project. The output of our sample project would look like as shown in picture 1. You can find the library in DtouchMobile folder and the sample code in DtouchSample1 folder on the <a href="https://github.com/horizon-institute/tableware">github</a>. <br />
 <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
-<tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-y7E11k-a7ZM/T33AqCMRK1I/AAAAAAAAAnc/AKP5Jjc_9ss/s1600/dtouchOutputDebug.png" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="http://1.bp.blogspot.com/-y7E11k-a7ZM/T33AqCMRK1I/AAAAAAAAAnc/AKP5Jjc_9ss/s320/dtouchOutputDebug.png" width="192" /></a></td></tr>
+<tr><td style="text-align: center;"><a href="./images/dtouchOutputDebug.png" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="./images/dtouchOutputDebug.png" width="192" /></a></td></tr>
 <tr><td class="tr-caption" style="text-align: center;">Picture 1: Sample camera preview with marker detection window.<br />
 <!--more--></td></tr>
 </tbody></table>
@@ -60,7 +60,7 @@ d-touch mobile library uses <a href="http://opencv.willowgarage.com/wiki/Welcome
 d-touch Mobile library</h3>
 Download d-touch library <a href="https://github.com/horizon-institute/tableware">source code</a> from the github. In Eclipse right click on DtouchMobile project and click properties. Select Android menu and it will display Project Build Target and Reference section. In the Reference section click add and select OpenCV library which you have downloaded.<br />
 <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
-<tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-QsN7bSzNdD0/T3x7QlbO--I/AAAAAAAAAnU/fyjTiwnmntc/s1600/ProjectProperties.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="400" src="http://1.bp.blogspot.com/-QsN7bSzNdD0/T3x7QlbO--I/AAAAAAAAAnU/fyjTiwnmntc/s400/ProjectProperties.png" width="278" /></a></td></tr>
+<tr><td style="text-align: center;"><a href="./images/ProjectProperties.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="400" src="./images/ProjectProperties.png" width="278" /></a></td></tr>
 <tr><td class="tr-caption" style="text-align: center;">Picture 2: Select OpenCV library</td></tr>
 </tbody></table>
 <br />
@@ -205,18 +205,18 @@ Open AndroidManifest.xml file and update activity to HICameraActivity and also a
 <div style="text-align: left;">
 At this stage the program should compile successfully. Run this program and you should be able to see full camera surface with the central region detecting the markers. <br />
 <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
-<tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-y7E11k-a7ZM/T33AqCMRK1I/AAAAAAAAAnc/AKP5Jjc_9ss/s1600/dtouchOutputDebug.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="http://1.bp.blogspot.com/-y7E11k-a7ZM/T33AqCMRK1I/AAAAAAAAAnc/AKP5Jjc_9ss/s320/dtouchOutputDebug.png" width="192" /></a></td></tr>
+<tr><td style="text-align: center;"><a href="./images/dtouchOutputDebug.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="./images/dtouchOutputDebug.png" width="192" /></a></td></tr>
 <tr><td class="tr-caption" style="text-align: center;">Picture 4: Sample camera preview with marker detection window.</td></tr>
 </tbody></table>
 <br />
 Now point your mobile to one of the sample markers. These markers are available in DtouchSampleImages folder on <a href="https://github.com/horizon-institute/tableware">github</a>.<br />
 <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
-<tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-nJMRqFhvsWM/T33BItILvNI/AAAAAAAAAnk/Q5SnR5szkxo/s1600/dtouchOutput.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="http://2.bp.blogspot.com/-nJMRqFhvsWM/T33BItILvNI/AAAAAAAAAnk/Q5SnR5szkxo/s320/dtouchOutput.png" width="192" /></a></td></tr>
+<tr><td style="text-align: center;"><a href="./images/dtouchOutput.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="./images/dtouchOutput.png" width="192" /></a></td></tr>
 <tr><td class="tr-caption" style="text-align: center;">Picture 5: Marker detection.</td></tr>
 </tbody></table>
 You can see in picture 5 that the marker has been detected by the application. It shows d-touch marker code with the shape of the detected marker.</div>
 </div>
-
+<br/>
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
