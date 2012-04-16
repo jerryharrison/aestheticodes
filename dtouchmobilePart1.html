@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Tableware : d-touch Mobile - Part 1" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Tableware</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/horizon-institute/tableware">Fork Me on GitHub</a>
+
+          <h1 id="project_title">Tableware</h1>
+          <h2 id="project_tagline">d-touch Mobile - Part 1</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/horizon-institute/tableware/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/horizon-institute/tableware/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<div dir="ltr" style="text-align: left;" trbidi="on">
+d-touch markers are visual markers which are easy to design and easy to communicate to humans. Enrico Costanza has introduced these markers and has launched a dedicated <a href="http://www.d-touch.org/">d-touch</a> website for this project. d-touch markers can be used in mixed reality application. As part of the research project for <a href="http://www.horizon.ac.uk/Home">Horizon Digital Economy Research Institute</a>, <a href="http://www.nottingham.ac.uk/">University of Nottingham</a> , I have developed a d-touch library for Android system. In this post I will give an introduction of the d-touch markers. In our next <a href="http://horizoncloud.blogspot.co.uk/2012/04/d-touch-mobile-d-touch-markers-are.html">post</a> I will show how to create a sample application using d-touch mobile library. The library and sample source code is available on the <a href="https://github.com/horizon-institute/tableware">github</a>. Please feel free to use this for building cool projects! Here are few example outputs of the sample code in DtouchSample folder on the  <a href="https://github.com/horizon-institute/tableware">github</a>.<br />
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-ePaAPjzorBI/T3wqyXzoyrI/AAAAAAAAAmE/IxkNpsaPXNs/s1600/youtube.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img alt="Youtube marker" border="0" height="320" src="http://1.bp.blogspot.com/-ePaAPjzorBI/T3wqyXzoyrI/AAAAAAAAAmE/IxkNpsaPXNs/s320/youtube.png" title="Youtube marker" width="192" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Youtube dtouch marker<br />
+<!--more--></td></tr>
+</tbody></table>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-mbFz0qDnKxo/T3wq1H1kiSI/AAAAAAAAAmM/a8mETqBCmpw/s1600/youtube-detected.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="http://2.bp.blogspot.com/-mbFz0qDnKxo/T3wq1H1kiSI/AAAAAAAAAmM/a8mETqBCmpw/s320/youtube-detected.png" width="192" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Youtube dtouch marker detected.</td></tr>
+</tbody></table>
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-zmAeFzHW_Y4/T3w5dsofqUI/AAAAAAAAAmc/RuQMQKWaCDM/s1600/sunnyweather.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="http://1.bp.blogspot.com/-zmAeFzHW_Y4/T3w5dsofqUI/AAAAAAAAAmc/RuQMQKWaCDM/s320/sunnyweather.png" width="192" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Sunny weather marker</td></tr>
+</tbody></table>
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-VNTIp5yQHFc/T3w5cgei2OI/AAAAAAAAAmU/kVILetKbNUM/s1600/sunnyweather-detected.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="http://2.bp.blogspot.com/-VNTIp5yQHFc/T3w5cgei2OI/AAAAAAAAAmU/kVILetKbNUM/s320/sunnyweather-detected.png" width="192" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Sunny weather detected</td></tr>
+</tbody></table>
+<br />
+<h3 style="text-align: left;">
+
+
+
+
+
+
+
+
+
+d-touch Markers</h3>
+<div style="text-align: left;">
+The basic principle is that one dark region can have one or many light regions and each light region can have zero or more dark regions. For example following diagram is a d-touch marker:</div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-PF98wu3oP8E/T3xFnixKJ1I/AAAAAAAAAmk/trDCR4rURpA/s1600/dtouch-circle.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="153" src="http://2.bp.blogspot.com/-PF98wu3oP8E/T3xFnixKJ1I/AAAAAAAAAmk/trDCR4rURpA/s320/dtouch-circle.png" width="320" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Picture-1: d-touch marker example.</td></tr>
+</tbody></table>
+<div style="text-align: left;">
+&nbsp; As shown above, the marker in the diagram has three regions.&nbsp; </div>
+<ol style="text-align: left;">
+<li>Black region (dark region): This region is the root of the marker and the marker should be within this region.</li>
+<li>White region (light region): The white region in the root region is called the branch region. In this example there is only one branch.</li>
+<li>Black region (dark region): The branch or the white region contains one black region. This black or dark region is called the leaf. If the branch has no black region then we call it empty branch.</li>
+</ol>
+<h3 style="text-align: left;">
+
+
+
+
+
+
+
+
+
+d-touch marker code</h3>
+<div style="text-align: left;">
+d-touch marker code is calculated based on the number of leaves in each branch. For example the d-touch marker shown in picture-1 has code:1. This marker has one branch and that branch has only one leaf. Lets take another example to make it more clear. The marker in the picture: 2 has two branches and each branch has two leaves. </div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-VtFS7elBS40/T3xLJ6mLRWI/AAAAAAAAAms/ymMLgSz2QGs/s1600/dtouch-2circles.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="184" src="http://3.bp.blogspot.com/-VtFS7elBS40/T3xLJ6mLRWI/AAAAAAAAAms/ymMLgSz2QGs/s320/dtouch-2circles.png" width="320" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Picture 2: d-touch marker with two branches</td></tr>
+</tbody></table>
+<div style="text-align: left;">
+&nbsp;The region which covers both circles is the root region. So root region without branches looks like as shown in picture3:</div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-sWXlLXA6or4/T3xL9zqDVfI/AAAAAAAAAm0/gaueVQK1uS4/s1600/dtouch-2circlesRootRegion.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="184" src="http://3.bp.blogspot.com/-sWXlLXA6or4/T3xL9zqDVfI/AAAAAAAAAm0/gaueVQK1uS4/s320/dtouch-2circlesRootRegion.png" width="320" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Picture 3: d-touch marker's root region</td></tr>
+</tbody></table>
+<div style="text-align: left;">
+As we can see from pictures 2 &amp; 3 that there are two branches or white regions in the root or the black region. Each white region or branch has two leaves or dark regions. As we have two branches with each has two leaves therefore the code of this marker is 2:2 (i.e. 2 leaves in each branch). If instead of 2 if we had two leaves in one branch and 5 leaves in the other branch then the code would have been 2:5. Please note that we always write code in the ascending order.</div>
+<div style="text-align: left;">
+<br /></div>
+<h3 style="text-align: left;">
+
+
+
+
+
+
+
+
+
+Equal d-touch markers</h3>
+<div style="text-align: left;">
+It is possible that two visually different d-touch markers represent same code. For example in picture 4, both markers represent same code.</div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-jnuisI-XsqY/T3xTL8q5bxI/AAAAAAAAAnM/zmFMmx3YIF8/s1600/dtouch-equalmarkers.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="94" src="http://4.bp.blogspot.com/-jnuisI-XsqY/T3xTL8q5bxI/AAAAAAAAAnM/zmFMmx3YIF8/s320/dtouch-equalmarkers.png" width="320" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Picture 4: Both markers have same code i.e 3:5</td></tr>
+</tbody></table>
+<div style="text-align: left;">
+In the above example both markers have same code i.e. 3:5. Please note that the marker with rectangle regions have leaves with different shapes. Important thing to remember is that shapes are not important it is the light and dark regions which define the codes.</div>
+<div style="text-align: left;">
+<br /></div>
+<div style="text-align: left;">
+If you would like to learn more about the d-touch markers then please visit the&nbsp;<a href="http://www.d-touch.org/">d-touch</a> website.</div>
+</div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Tableware maintained by <a href="https://github.com/horizon-institute">horizon-institute</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
