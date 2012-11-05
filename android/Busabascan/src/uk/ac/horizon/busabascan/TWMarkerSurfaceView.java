@@ -7,6 +7,7 @@ import java.util.List;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -32,8 +33,6 @@ import android.widget.ProgressBar;
 class TWMarkerSurfaceView extends TWSurfaceViewBase {
     private Mat mRgba;
     private Mat mGray;
-    private ArrayList<Mat> mComponents;
-    private Mat mHierarchy;
     private MarkerDetector markerDetector;
     private Mat mMarkerImage;
     private OnMarkerDetectedListener markerListener;
@@ -83,10 +82,14 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
         }
 
         Bitmap bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
-        if (Utils.matToBitmap(mRgba, bmp))
-            return bmp;
-        bmp.recycle();
-        return null;
+        try {
+  			Utils.matToBitmap(mRgba, bmp);
+  			return bmp;
+      	} catch(Exception e) {
+    		Log.e("TWMarkerSurfaceView", "Utils.matToBitmap() throws an exception: " + e.getMessage());
+    		bmp.recycle();
+    		return null;
+      	}
     }
     
     private Bitmap displayDetectedMarker(VideoCapture capture, Mat markerImage){
@@ -95,15 +98,23 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     	displayMaskOnImageSegment(mRgba,true);
     	displayMarkerImage(mMarkerImage, mRgba);
     	
-    	 Bitmap bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
-         if (Utils.matToBitmap(mRgba, bmp))
-             return bmp;
-         bmp.recycle();
-         return null;
+    	Bitmap bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
+        try {
+   			Utils.matToBitmap(mRgba, bmp);
+   			return bmp;
+       	} catch(Exception e) {
+     		Log.e("TWMarkerSurfaceView", "Utils.matToBitmap() throws an exception: " + e.getMessage());
+     		bmp.recycle();
+     		return null;
+       	}
     }
     
     private void processFrameForMarkersFull(VideoCapture capture, List<DtouchMarker> markers){
     	if (capture == null || mRgba == null) return;
+    	
+      	ArrayList<MatOfPoint> components = new ArrayList<MatOfPoint>();
+    	Mat hierarchy = new Mat();
+    	
     	//Get original image.
     	capture.retrieve(mRgba, Highgui.CV_CAP_ANDROID_COLOR_FRAME_RGBA);
         //Get gray scale image.
@@ -116,7 +127,7 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     	applyThresholdOnImage(imgSegmentMat,thresholdedImgMat);
     	imgSegmentMat.release();
     	//find markers.
-    	boolean markerFound = findMarkers(thresholdedImgMat, markers);
+    	boolean markerFound = findMarkers(thresholdedImgMat, markers, components, hierarchy);
     	thresholdedImgMat.release();
 
     	//Marker detected.
@@ -132,6 +143,13 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     		displayMarkerImage(mMarkerImage, mRgba);
     	}else
     		displayMaskOnImageSegment(mRgba,false);
+    
+    	if (components != null)
+        	components.clear();
+        if (hierarchy != null)
+        	hierarchy.release();
+      	components = null;
+      	hierarchy = null;
     }
 
 	public Integer getPendingPercent() {
@@ -140,6 +158,9 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
 	}
     
     private void processFrameForMarkersDebug(VideoCapture capture){
+      	ArrayList<MatOfPoint> components = new ArrayList<MatOfPoint>();
+    	Mat hierarchy = new Mat();
+    	
     	//Get original image.
     	capture.retrieve(mRgba, Highgui.CV_CAP_ANDROID_COLOR_FRAME_RGBA);
         //Get gray scale image.
@@ -154,15 +175,20 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     	Scalar contourColor = new Scalar(0, 0, 255);
     	Scalar codesColor = new Scalar(255,0,0,255);
 
-    	displayMarkersDebug(thresholdedImgMat, contourColor, codesColor);
+    	displayMarkersDebug(thresholdedImgMat, contourColor, codesColor, components, hierarchy);
     	//displayThresholds(mRgba, codesColor, localThresholds);
 		displayMaskOnImageSegment(mRgba,false);
-
+		
+    	if (components != null)
+        	components.clear();
+        if (hierarchy != null)
+        	hierarchy.release();
+      	components = null;
+      	hierarchy = null;
     }
     
     private Mat cloneMarkerImageSegment(Mat imgMat){
     	Rect rect = calculateImageSegmentArea(imgMat);
-        //Mat calculatedImg = imgMat.submat(rect.x, rect.x + rect.width,rect.y,rect.y + rect.height);
         Mat calculatedImg = imgMat.submat(rect.y, rect.y + rect.height,rect.x,rect.x + rect.width);
     	return calculatedImg.clone();
     }
@@ -210,14 +236,13 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     	else
     		color = new Scalar(255,160,36,255);
     	Rect rect = calculateImageSegmentArea(imgMat);
-    	Core.rectangle(imgMat, rect.tl(), rect.br(), color, 3, Core.LINE_AA);
+    	Core.rectangle(imgMat, rect.tl(), rect.br(), color, 3, Core.LINE_AA, 0);
     }
     
     private void displayMarkerImage(Mat srcImgMat, Mat destImageMat){
     	//find location of image segment to be replaced in the destination image.
     	Rect rect = calculateImageSegmentArea(destImageMat);
-    	//Mat destSubmat = destImageMat.submat(rect.x,rect.x + rect.width, rect.y, rect.y + rect.height);
-    	Mat destSubmat = destImageMat.submat(rect.y,rect.y + rect.height, rect.x, rect.x + rect.width);
+     	Mat destSubmat = destImageMat.submat(rect.y,rect.y + rect.height, rect.x, rect.x + rect.width);
     	//copy image.
     	srcImgMat.copyTo(destSubmat);
     }
@@ -228,8 +253,7 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     	Imgproc.cvtColor(thresholdedImgMat, smallRegionImg, Imgproc.COLOR_GRAY2BGRA, 4);
     	//find location of image segment to be replaced in the destination image.
     	Rect rect = calculateImageSegmentArea(dest);
-    	//Mat destSubmat = dest.submat(rect.x,rect.x+rect.width,rect.y, rect.y+rect.height);
-    	Mat destSubmat = dest.submat(rect.y,rect.y+rect.height,rect.x, rect.x+rect.width);
+     	Mat destSubmat = dest.submat(rect.y,rect.y+rect.height,rect.x, rect.x+rect.width);
     	//copy image.
     	smallRegionImg.copyTo(destSubmat);
     	smallRegionImg.release();
@@ -281,22 +305,22 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     	return localThresholds;
     }
     
-    private boolean findMarkers(Mat imgMat, List<DtouchMarker> markers){
+    private boolean findMarkers(Mat imgMat, List<DtouchMarker> markers, ArrayList<MatOfPoint> components, Mat hierarchy){
     	boolean markerFound = false;
     	//holds all the markers identified in the camera.
     	List<DtouchMarker> markersDetected = new ArrayList<DtouchMarker>();
     	Mat contourImg = imgMat.clone();
     	//Find blobs using connect component.
-    	Imgproc.findContours(contourImg, mComponents, mHierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+    	Imgproc.findContours(contourImg, components, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
     	//No need to use contourImg so release it.
     	contourImg.release();
     	
     	List<Integer> code = new ArrayList<Integer>();
     	    	
-    	for (int i = 0; i < mComponents.size(); i++){
+    	for (int i = 0; i < components.size(); i++){
     		//clean this list.
     		code.clear();
-    		if (markerDetector.verifyRoot(i, mComponents.get(i), mHierarchy,code)){
+    		if (markerDetector.verifyRoot(i, hierarchy,code)){
     			//if marker found then add in the list.
     			DtouchMarker markerDetected = new DtouchMarker();
     			markerDetected.setCode(code);
@@ -308,12 +332,6 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     	//if markers are found then decide which marker code occurred most. 
     	if (markersDetected.size() > 0){
     		markerFound = true;
-    		//DtouchMarker markerSelected = markerDetector.compareDetectedMarkers(markersDetected);
-    		//if (markerSelected != null){
-    			//markers.setCode(markerSelected.getCode());
-    			//markers.setComponentIndex(markerSelected.getComponentIndex());
-    			//markerFound = true;
-    		//}
     	}
     	return markerFound;
     }
@@ -331,9 +349,9 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
     //	}*/
     //}
     
-    private void displayMarkersDebug(Mat imgMat, Scalar contourColor, Scalar codesColor){
+    private void displayMarkersDebug(Mat imgMat, Scalar contourColor, Scalar codesColor, ArrayList<MatOfPoint> components, Mat hierarchy){
     	List<DtouchMarker> markers= new ArrayList<DtouchMarker>();
-    	boolean markerFound = findMarkers(imgMat, markers);
+    	boolean markerFound = findMarkers(imgMat, markers, components, hierarchy);
     	int m=0;
     	if (markerFound){    	
     	    for(DtouchMarker marker : markers)
@@ -344,17 +362,11 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
 	 
 	    		Rect rect = calculateImageSegmentArea(mRgba);
 	        	Mat destSubmat = mRgba.submat(rect.y,rect.y + rect.height, rect.x, rect.x + rect.width);
-	    		Imgproc.drawContours(destSubmat, mComponents, marker.getComponentIndex(), contourColor, 3, 8, mHierarchy, 0);
+	    		//Imgproc.drawContours(destSubmat, components, marker.getComponentIndex(), contourColor, 3, 8, hierarchy, 0);
+	        	Imgproc.drawContours(destSubmat, components, marker.getComponentIndex(), contourColor, 3, Core.LINE_8, hierarchy, 2, new Point(0,0));
 	    		m++;
 	    	}
     	}
-    	/*
-    	for (DtouchMarker marker : markers){
-    		String code = codeArrayToString(marker.getCode());
-    		//Point codeLocation = new Point(imgMat.cols() / 4, imgMat.rows()/8);
-    		Core.putText(mRgba, code, codeLocation, Core.FONT_HERSHEY_COMPLEX, 1, codesColor,3);
-    		Imgproc.drawContours(mRgba, mComponents, marker.getComponentIndex(), contourColor, 3, 8, mHierarchy, 0);
-    	}*/
     }
 
     
@@ -398,10 +410,10 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
         			if (canvas != null) {
         				//RNM rotate to receive landscape camera in portrait display
         				canvas.rotate(90);
-        				//canvas.drawBitmap(bmp, (canvas.getWidth() - bmp.getWidth()) / 2, (canvas.getHeight() - bmp.getHeight()) / 2, null);
         				//RNM Position empirically.
-        				float left = 20;
-        				float top = -480;
+        				
+        				float left = 0;
+        				float top = -canvas.getWidth();
         				canvas.drawBitmap(bmp, left, top, null);
         				mHolder.unlockCanvasAndPost(canvas);
         			}
@@ -433,8 +445,6 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
             mGray = new Mat();
             mRgba = new Mat();
             mMarkerImage = new Mat();
-            mComponents = new ArrayList<Mat>();
-            mHierarchy = new Mat();
         }
     	markerDetector = new MarkerDetector(this.getContext(), new HIPreferenceTableware(this.getContext()));
     }
@@ -449,14 +459,8 @@ class TWMarkerSurfaceView extends TWSurfaceViewBase {
             	mMarkerImage.release();
             if (mGray != null)
                 mGray.release();
-            if (mComponents != null)
-            	mComponents.clear();
-            if (mHierarchy != null)
-            	mHierarchy.release();
             mRgba = null;
             mGray = null;
-            mComponents = null;
-            mHierarchy = null;
         }
         markerDetector = null;
     }

@@ -19,20 +19,18 @@
 
     <FrameLayout
         android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/LinearLayout1"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1">
 
         <view
             android:id="@+id/MarkerSurfaceView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             class="uk.ac.horizon.busabascan.TWMarkerSurfaceView" />
-
     </FrameLayout>
-
     <ProgressBar
         android:id="@+id/integrationBar"
         style="?android:attr/progressBarStyleHorizontal"

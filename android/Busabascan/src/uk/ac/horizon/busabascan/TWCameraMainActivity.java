@@ -2,6 +2,10 @@ package uk.ac.horizon.busabascan;
 
 import java.util.List;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
 import com.facebook.android.R;
 
 import uk.ac.horizon.busabascan.MarkerPopupWindow.OnMarkerPopupWindowListener;
@@ -56,13 +60,43 @@ public class TWCameraMainActivity extends Activity implements OnMarkerDetectedLi
     public static int viewMode  = VIEW_MODE_MARKER;
     
     
+    private BaseLoaderCallback mOpenCVCallBack = new BaseLoaderCallback(this) {
+    	@Override
+    	public void onManagerConnected(int status) {
+    	   switch (status) {
+    	       case LoaderCallbackInterface.SUCCESS:
+    	       {
+    	    	   Log.i(TAG, "OpenCV loaded successfully");
+    	    	   // Create and set View
+    	    	   //setContentView(R.layout.main);
+    	    	   setContentView(R.layout.markercamera);
+    	    	   String versionName = "";
+    	           try {
+    	               final PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+    	               versionName = packageInfo.versionName;
+    	           } catch (NameNotFoundException e) {
+    	               e.printStackTrace();
+    	           }
+    	           TextView tv = (TextView) findViewById(R.id.textView1);
+    	           tv.setText("Scan Busaba - (" + versionName + ")");
+    	           initTWSurfaceView();
+    	    	   startMarkerDetectionProcess();
+    	      } break;
+    	       default:
+    	       {
+    	    	   super.onManagerConnected(status);
+    	       } break;
+    	   }
+    	}
+    };
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //displaySplashScreen();
-        setContentView(R.layout.markercamera);
+        /*setContentView(R.layout.markercamera);
         String versionName = "";
         try {
             final PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -72,7 +106,7 @@ public class TWCameraMainActivity extends Activity implements OnMarkerDetectedLi
         }
         TextView tv = (TextView) findViewById(R.id.textView1);
         tv.setText("Scan Busaba - (" + versionName + ")");
-        initTWSurfaceView();
+        initTWSurfaceView();*/
         
     }
     
@@ -84,11 +118,23 @@ public class TWCameraMainActivity extends Activity implements OnMarkerDetectedLi
         return true;
     }
     
-    @Override 
+    
+/*    @Override 
     public void onResume(){
     	super.onResume();
     	Log.d(TAG, "On Resume");
     	startMarkerDetectionProcess();
+    }*/
+    @Override 
+    public void onResume(){
+    	super.onResume();
+    	Log.d(TAG, "On Resume");
+    	//startMarkerDetectionProcess();
+        Log.i(TAG, "Trying to load OpenCV library");
+        if (!OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_2, this, mOpenCVCallBack))
+        {
+        	Log.e(TAG, "Cannot connect to OpenCV Manager");
+        }
     }
     
     @Override
@@ -317,7 +363,8 @@ public class TWCameraMainActivity extends Activity implements OnMarkerDetectedLi
 
 						    if (pendpercent > 0)
 					    	{
-						       if (pb.getVisibility() != View.VISIBLE)
+						       
+						    if (pb.getVisibility() != View.VISIBLE)
 						       {
 						            pb.setVisibility(View.VISIBLE);
 						       }

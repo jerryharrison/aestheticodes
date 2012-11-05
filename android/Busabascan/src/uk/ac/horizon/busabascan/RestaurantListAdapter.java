@@ -24,9 +24,9 @@ public class RestaurantListAdapter extends BaseExpandableListAdapter {
 private String[] locations = { "Wardour St", "Store St",
     "Bird St", "Panton St", "Old St", "Westfield Sheperd's Bush", "Bicester Village", "Floral St", "King's Road", "Westfield Stratford City" };
 private String[][] detail = { 
-		{ "11", "106Ð110 Wardour St. London W1F 0TR", "tel: 020 7255 8686","Today's Specials" },
+		{ "11", "106 Wardour St. London W1F 0TR", "tel: 020 7255 8686","Today's Specials" },
 		{ "15", "22 Store Street, London WC1E 7DF", "tel: 020 7299 7900","Today's Specials" },
-		{ "7", "8Ð13 Bird Street, London W1U 1BU", "tel: 020 7518 8080","Today's Specials" },
+		{ "7", "813 Bird Street, London W1U 1BU", "tel: 020 7518 8080","Today's Specials" },
 		{ "8", "35 Panton Street, London SW1Y 4EA", "tel: 020 7930 0088","Today's Specials" },
 		{ "2", "319 Old Street, London EC1V 9LE", "tel: 020 7729 0808","Today's Specials" },
 		{ "4", "Westfield Shepherd's Bush, London W12 7GA", "tel: 020 3249 1919","Today's Specials" },
@@ -100,7 +100,7 @@ public TextView getGenericView() {
 public Button getButton(String text) {
     // Layout parameters for the ExpandableListView
     AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-        ViewGroup.LayoutParams.WRAP_CONTENT, 64);
+        ViewGroup.LayoutParams.WRAP_CONTENT, 70);
 
     Button button = new Button(activity);
     button.setLayoutParams(lp);
@@ -145,17 +145,18 @@ public long getGroupId(int groupPosition) {
 public View getGroupView(int groupPosition, boolean isExpanded,
     View convertView, ViewGroup parent) {
     
-//    AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-//            ViewGroup.LayoutParams.WRAP_CONTENT, 64);
     AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-            320, 64);
+            ViewGroup.LayoutParams.FILL_PARENT, 64);
+//    AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+//            320, 64);
 
     TextView textView = new TextView(activity);
     textView.setLayoutParams(lp);
     // Center the text vertically
     textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
     // Set the text starting position
-    textView.setPadding(60, 0, 0, 0);
+    //textView.setPadding(60, 0, 0, 0);
+    textView.setPadding(80, 0, 0, 0);
     textView.setText(getGroup(groupPosition).toString());
     
     int progress = 100 - getNormalisedQueueTime(groupPosition);

@@ -1,5 +1,9 @@
 package uk.ac.horizon.dtouchScanner;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
 import uk.ac.horizon.data.DataMarker;
 import uk.ac.horizon.data.DataMarkerWebServices;
 import uk.ac.horizon.dtouchMobile.DtouchMarker;
@@ -30,14 +34,34 @@ public class TWCameraActivity extends Activity implements OnMarkerDetectedListen
 	        
 	    public static int viewMode  = VIEW_MODE_MARKER;
 	    
+	    private BaseLoaderCallback mOpenCVCallBack = new BaseLoaderCallback(this) {
+	    	@Override
+	    	public void onManagerConnected(int status) {
+	    	   switch (status) {
+	    	       case LoaderCallbackInterface.SUCCESS:
+	    	       {
+	    	    	   Log.i(TAG, "OpenCV loaded successfully");
+	    	    	   // Create and set View
+	    	    	   //setContentView(R.layout.main);
+	    	    	   setContentView(R.layout.markercamera);
+	    	    	   initTWSurfaceViewListener();
+	    	    	   startMarkerDetectionProcess();
+	    	      } break;
+	    	       default:
+	    	       {
+	    	    	   super.onManagerConnected(status);
+	    	       } break;
+	    	   }
+	    	}
+	    };
 	    
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        requestWindowFeature(Window.FEATURE_NO_TITLE);
 	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	        setContentView(R.layout.markercamera);
-	        initTWSurfaceViewListener();
+	        //setContentView(R.layout.markercamera);
+	        //initTWSurfaceViewListener();
 	    }
 	    
 	    @Override
@@ -52,7 +76,12 @@ public class TWCameraActivity extends Activity implements OnMarkerDetectedListen
 	    public void onResume(){
 	    	super.onResume();
 	    	Log.d(TAG, "On Resume");
-	    	startMarkerDetectionProcess();
+	    	//startMarkerDetectionProcess();
+	        Log.i(TAG, "Trying to load OpenCV library");
+	        if (!OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_2, this, mOpenCVCallBack))
+	        {
+	        	Log.e(TAG, "Cannot connect to OpenCV Manager");
+	        }
 	    }
 	    
 	    @Override

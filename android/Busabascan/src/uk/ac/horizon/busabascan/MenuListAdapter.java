@@ -230,7 +230,7 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
     	textView.setTextColor(activity.getResources().getColor(col_id));
     	textView.setTypeface(null,Typeface.BOLD);
     	// Set the text starting position
-    	int left = 60;
+    	int left = 80;
     	int top = 20;
     	int right = 20;
     	int bottom = 20;
@@ -241,7 +241,7 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
     public Button getButton(String text, OnClickListener callback) {
         // Layout parameters for the ExpandableListView
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, 64);
+            ViewGroup.LayoutParams.WRAP_CONTENT, 70);
 
         Button button = new Button(activity);
         button.setLayoutParams(lp);

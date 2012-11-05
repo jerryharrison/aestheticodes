@@ -1,5 +1,8 @@
 package uk.ac.horizon.dtouchSample;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Rect;
 
 import uk.ac.horizon.dtouchMobile.DtouchMarker;
@@ -37,6 +40,26 @@ public class HICameraActivity extends Activity implements OnMarkerDetectedListen
         
     public static int viewMode  = VIEW_MODE_MARKER;
     
+    private BaseLoaderCallback mOpenCVCallBack = new BaseLoaderCallback(this) {
+    	@Override
+    	public void onManagerConnected(int status) {
+    	   switch (status) {
+    	       case LoaderCallbackInterface.SUCCESS:
+    	       {
+    	    	   Log.i(TAG, "OpenCV loaded successfully");
+    	    	   // Create and set View
+    	    	   //setContentView(R.layout.main);
+    	    	   setContentView(R.layout.markercamera);
+    	    	   initTWSurfaceViewListener();
+    	    	   startMarkerDetectionProcess();
+    	      } break;
+    	       default:
+    	       {
+    	    	   super.onManagerConnected(status);
+    	       } break;
+    	   }
+    	}
+    };
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +67,8 @@ public class HICameraActivity extends Activity implements OnMarkerDetectedListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //displaySplashScreen();
-        setContentView(R.layout.markercamera);
-        initTWSurfaceViewListener();
+  
+   
     }
     
     @Override
@@ -60,7 +83,12 @@ public class HICameraActivity extends Activity implements OnMarkerDetectedListen
     public void onResume(){
     	super.onResume();
     	Log.d(TAG, "On Resume");
-    	startMarkerDetectionProcess();
+    	  
+        Log.i(TAG, "Trying to load OpenCV library");
+        if (!OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_2, this, mOpenCVCallBack))
+        {
+        	Log.e(TAG, "Cannot connect to OpenCV Manager");
+        }
     }
     
     @Override

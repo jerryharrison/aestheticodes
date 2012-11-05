@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.opencv.core.Mat;
-
 import android.content.Context;
 
 /**
@@ -54,18 +53,19 @@ public class MarkerDetector
 	 * @param codes An empty but not null list. It contains the code if the root node is determined as the d-touch marker.
 	 * @return returns true if the root node is a valid d-touch marker otherwise returns false.
 	 */
-	public Boolean verifyRoot(int rootIndex, Mat rootNode, Mat hierarchy, List<Integer> codes){
+	public Boolean verifyRoot(int rootIndex, Mat hierarchy, List<Integer> codes){
 		Boolean valid = false;
 		int branchCount = 0;
 		int emptyBranchCount = 0;
 		int currentBranchIndex = -1;
 		BranchStatus status;
-				
+		
 		//get the nodes of the root node.
 		double[] nodes = hierarchy.get(0, rootIndex);
+		
 		//get the first child node.
 		currentBranchIndex = (int)nodes[FIRST_NODE];
-
+		
 		//if there is a branch node then verify branches.
 		if (currentBranchIndex >= 0 ){
 			//loop until there is a branch node.

@@ -21,7 +21,6 @@ public abstract class HISurfaceViewBase extends SurfaceView implements SurfaceHo
     protected volatile Thread	mThread;
     protected boolean mIsSurfaceValid;
 
-        
     public HISurfaceViewBase(Context context) {
         super(context);
         setHolder();

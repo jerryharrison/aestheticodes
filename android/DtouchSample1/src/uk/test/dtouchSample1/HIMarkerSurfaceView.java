@@ -6,6 +6,7 @@ import java.util.List;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -28,8 +29,6 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
     private static final int NO_OF_TILES = 2;
     private Mat mRgba;
     private Mat mGray;
-    private ArrayList<Mat> mComponents;
-    private Mat mHierarchy;
     private MarkerDetector markerDetector;
     private Mat mMarkerImage;
     private boolean mMarkerDetected;
@@ -51,10 +50,14 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
     private Bitmap processFrameForMarker(VideoCapture capture, DtouchMarker marker) {
     	processFrameForMarkersDebug(capture);
      	Bitmap bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
-        if (Utils.matToBitmap(mRgba, bmp))
-            return bmp;
-        bmp.recycle();
-        return null;
+     	 try {
+				Utils.matToBitmap(mRgba, bmp);
+				return bmp;
+     	 } catch(Exception e) {
+  			Log.e("TWMarkerSurfaceView", "Utils.matToBitmap() throws an exception: " + e.getMessage());
+  			bmp.recycle();
+  			return null;
+     	 }
     }
     
     private Bitmap displayDetectedMarker(VideoCapture capture, Mat markerImage){
@@ -64,10 +67,14 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
     	displayMarkerImage(mMarkerImage, mRgba);
     	
     	 Bitmap bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
-         if (Utils.matToBitmap(mRgba, bmp))
-             return bmp;
-         bmp.recycle();
-         return null;
+    	 try {
+				Utils.matToBitmap(mRgba, bmp);
+				return bmp;
+     	 } catch(Exception e) {
+  			Log.e("TWMarkerSurfaceView", "Utils.matToBitmap() throws an exception: " + e.getMessage());
+  			bmp.recycle();
+  			return null;
+     	 }
     }
     
     private void processFrameForMarkersDebug(VideoCapture capture){
@@ -137,7 +144,7 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
     	else
     		color = new Scalar(255,0,0,255);
     	Rect rect = calculateImageSegmentArea(imgMat);
-    	Core.rectangle(imgMat, rect.tl(), rect.br(), color, 3, Core.LINE_AA);
+    	Core.rectangle(imgMat, rect.tl(), rect.br(), color, 3, Core.LINE_AA, 0);
     }
     
     private void displayMarkerImage(Mat srcImgMat, Mat destImageMat){
@@ -203,20 +210,20 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
     	return localThresholds;
     }
     
-    private boolean findMarkers(Mat imgMat, DtouchMarker marker){
+    private boolean findMarkers(Mat imgMat, DtouchMarker marker, ArrayList<MatOfPoint> components, Mat hierarchy){
     	boolean markerFound = false;
     	Mat contourImg = imgMat.clone();
     	//Find blobs using connect component.
-    	Imgproc.findContours(contourImg, mComponents, mHierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+    	Imgproc.findContours(contourImg, components, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
     	//No need to use contourImg so release it.
     	contourImg.release();
     	
     	List<Integer> code = new ArrayList<Integer>();
     	    	
-    	for (int i = 0; i < mComponents.size(); i++){
+    	for (int i = 0; i < components.size(); i++){
     		//clean this list.
     		code.clear();
-    		if (markerDetector.verifyRoot(i, mComponents.get(i), mHierarchy,code)){
+    		if (markerDetector.verifyRoot(i, hierarchy,code)){
     			//if marker found.
     			marker.setCode(code);
     			marker.setComponentIndex(i);
@@ -228,14 +235,25 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
     }
     
     private void displayMarkersDebug(Mat imgMat, Scalar contourColor, Scalar codesColor){
+     	ArrayList<MatOfPoint> components = new ArrayList<MatOfPoint>();
+    	Mat hierarchy = new Mat();
     	DtouchMarker marker = new DtouchMarker();
-    	boolean markerFound = findMarkers(imgMat, marker);
+    	boolean markerFound = findMarkers(imgMat, marker, components, hierarchy);
     	if (markerFound){    	
     		String code = codeArrayToString(marker.getCode());
     		Point codeLocation = new Point(imgMat.cols() / 4, imgMat.rows()/8);
     		Core.putText(mRgba, code, codeLocation, Core.FONT_HERSHEY_COMPLEX, 1, codesColor,3);
-    		Imgproc.drawContours(mRgba, mComponents, marker.getComponentIndex(), contourColor, 3, 8, mHierarchy, 2);
+    		
+    		Rect rect = calculateImageSegmentArea(mRgba);
+        	Mat destSubmat = mRgba.submat(rect.y,rect.y + rect.height, rect.x, rect.x + rect.width);
+        	Imgproc.drawContours(destSubmat, components, marker.getComponentIndex(), contourColor, 3, Core.LINE_8, hierarchy, 2, new Point(0,0));
     	}
+      	if (components != null)
+        	components.clear();
+        if (hierarchy != null)
+        	hierarchy.release();
+      	components = null;
+      	hierarchy = null;
     }
     
     private String codeArrayToString(List<Integer> codes){
@@ -299,8 +317,6 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
             mGray = new Mat();
             mRgba = new Mat();
             mMarkerImage = new Mat();
-            mComponents = new ArrayList<Mat>();
-            mHierarchy = new Mat();
         }
     	
     	markerDetector = new MarkerDetector(this.getContext(), new PreferenceSample1(this.getContext()));
@@ -317,14 +333,8 @@ class HIMarkerSurfaceView extends HISurfaceViewBase {
             	mMarkerImage.release();
             if (mGray != null)
                 mGray.release();
-            if (mComponents != null)
-            	mComponents.clear();
-            if (mHierarchy != null)
-            	mHierarchy.release();
             mRgba = null;
             mGray = null;
-            mComponents = null;
-            mHierarchy = null;
         }
         markerDetector = null;
     }
